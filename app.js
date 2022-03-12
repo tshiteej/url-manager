@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/user', require('./routes/users'))
 app.use('/auth', require('./routes/auth'))
+app.use('/shortcut', require('./routes/shortcuts'))
 
 
 const PORT = process.env.PORT || 5000;

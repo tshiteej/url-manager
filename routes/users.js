@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/database')
 const Users = require('../models/User')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -17,7 +16,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-// @route    POST /users
+// @route    POST /user/register
 // @desc     Register user
 // @access   Public
 router.post(

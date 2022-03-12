@@ -3,6 +3,8 @@ const db = require('./config/database')
 
 const Tokens = require('./models/Tokens')
 
+const jwt = require('jsonwebtoken');
+
 const saveToken = async (user, token) => {
     try {
         await Tokens.create({ user, token })
@@ -28,11 +30,23 @@ const invalidateToken = async (token) => {
             { active: false },
             { where: { token } }
         )
+        return true
+    } catch (err) {
+        console.log(err, "ERR [UTILS - check Token]")
+    }
+}
+
+const getUserFromToken = async (token) => {
+    try {
+
+        let data = await jwt.verify(token, process.env.JWT_SECRET)
+        return data
+
     } catch (err) {
         console.log(err, "ERR [UTILS - check Token]")
     }
 }
 
 module.exports = {
-    saveToken, checkToken, invalidateToken
+    saveToken, checkToken, invalidateToken, getUserFromToken
 }

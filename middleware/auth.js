@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const Tokens = require('../models/Tokens')
 
 const { checkToken } = require('../utils')
 
