@@ -1,8 +1,15 @@
-
 const express = require('express');
 require('dotenv').config();
+const bodyParser = require('body-parser');
 
 const app = express();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 
 let db = require('./config/database')
 // Database connection testing
@@ -12,7 +19,11 @@ db.authenticate().then(() => {
     console.error('Unable to connect to the database:', err);
 })
 
+// Body Parser
+app.use(express.urlencoded({ extended: false }));
+
 app.use('/user', require('./routes/users'))
+app.use('/auth', require('./routes/auth'))
 
 
 const PORT = process.env.PORT || 5000;
