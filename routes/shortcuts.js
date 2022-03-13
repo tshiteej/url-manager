@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/database')
+const Sequelize = require('sequelize');
 const Shortcuts = require('../models/Shortcuts')
 const auth = require('../middleware/auth');
 
 const { check, validationResult } = require('express-validator');
 const { getUserFromToken } = require('../utils')
-
+const Op = Sequelize.Op;
 
 
 // @route    GET /shortcut
@@ -17,19 +17,47 @@ router.get(
     auth,
     async (req, res) => {
         try {
+
+            let { q, _sort = [] } = req.query
+            _sort = JSON.parse(_sort)
+
+            if (!_sort.length) _sort = ['createdAt', 'DESC']
+
+            console.log(q, "Q")
             const userData = await getUserFromToken(req.headers['x-auth-token'])
             const userId = userData.user.id
 
-            const data = await Shortcuts.findAll({
-                where: {
+            let searchParams
+
+            if (q) {
+                searchParams = {
+                    user: userId, active: true, [Op.or]: {
+                        shortcut: { [Op.like]: '%' + q + '%' },
+                        description: { [Op.like]: '%' + q + '%' },
+                        tags: { [Op.like]: '%' + q + '%' }
+                    }
+                }
+            } else {
+                searchParams = {
                     user: userId, active: true
                 }
+            }
+            // searchParams['order'] = [_sort]
+            // order: [
+            //     ['id', 'DESC'],
+            //     ['name', 'ASC'],
+            // ]
+            console.log(searchParams, "searchParams")
+            console.log(_sort, "_sort")
+            const data = await Shortcuts.findAll({
+                where: searchParams,
+                order: [_sort]
             })
             let response = []
-            data.forEach((item,i) => {
+            data.forEach((item, i) => {
                 response.push(item.dataValues)
             })
-            console.log(data,"DATA")
+
             res.send(response)
         } catch (err) {
             console.error(err.message);

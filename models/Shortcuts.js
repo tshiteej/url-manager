@@ -11,6 +11,12 @@ const Shortcuts = db.define('shortcuts', {
     complete_url: {
         type: Sequelize.STRING
     },
+    description: {
+        type: Sequelize.STRING
+    },
+    tags: {
+        type: Sequelize.STRING
+    },
     active: {
         type: Sequelize.BOOLEAN
     }
