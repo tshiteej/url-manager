@@ -19,11 +19,10 @@ router.get(
         try {
 
             let { q, _sort = [] } = req.query
-            _sort = JSON.parse(_sort)
+            _sort = typeof(_sort) != 'object' ? JSON.parse(_sort) : _sort
 
-            if (!_sort.length) _sort = ['createdAt', 'DESC']
+            if (!_sort.length) _sort = ['createdAt', 'DESC'];
 
-            console.log(q, "Q")
             const userData = await getUserFromToken(req.headers['x-auth-token'])
             const userId = userData.user.id
 
