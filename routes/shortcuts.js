@@ -42,11 +42,7 @@ router.get(
                     user: userId, active: true
                 }
             }
-            // searchParams['order'] = [_sort]
-            // order: [
-            //     ['id', 'DESC'],
-            //     ['name', 'ASC'],
-            // ]
+
             console.log(searchParams, "searchParams")
             console.log(_sort, "_sort")
             const data = await Shortcuts.findAll({
@@ -126,7 +122,6 @@ router.delete(
                 'Content-Type': 'application/json'
             })
                 .end("Shortcut not found");
-            // res.sendStatus(400).send({ msg: 'Shortcut not found' })
 
             let shortcutUser = entity.dataValues.user
 
@@ -136,12 +131,11 @@ router.delete(
 
             if (shortcutUser != userId) return res.status(400).json({ msg: 'You can only delete your shortcuts' });
 
-            console.log(id, "id")
             let entry = Shortcuts.update(
                 { active: false },
                 { where: { id } }
             )
-            // console.log(entry,"entry")
+
             return res.json(entry)
         } catch (err) {
             console.error(err.message);

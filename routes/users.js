@@ -9,7 +9,6 @@ const { saveToken } = require('../utils')
 router.get('/', async (req, res) => {
     try {
         let users = await Users.findAll()
-        console.log(users)
         res.sendStatus(200)
     } catch (err) {
         console.log(err, "ERROR")

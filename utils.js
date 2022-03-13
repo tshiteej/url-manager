@@ -1,10 +1,8 @@
-const Sequelize = require('sequelize')
-const db = require('./config/database')
-
 const Tokens = require('./models/Tokens')
 
 const jwt = require('jsonwebtoken');
 
+// Save issued tokens
 const saveToken = async (user, token) => {
     try {
         await Tokens.create({ user, token })
@@ -14,6 +12,7 @@ const saveToken = async (user, token) => {
     }
 }
 
+// Check if token is valid
 const checkToken = async (token) => {
     try {
         let entity = await Tokens.findOne({ where: { token } })
@@ -24,6 +23,7 @@ const checkToken = async (token) => {
     }
 }
 
+// Deactive the token
 const invalidateToken = async (token) => {
     try {
         Tokens.update(
@@ -36,6 +36,7 @@ const invalidateToken = async (token) => {
     }
 }
 
+// The user id for the token
 const getUserFromToken = async (token) => {
     try {
 

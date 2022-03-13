@@ -10,8 +10,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-
+// Call DB connection object
 let db = require('./config/database')
+
 // Database connection testing
 db.authenticate().then(() => {
     console.log('Connection has been established successfully.');

@@ -14,6 +14,9 @@ const Users = db.define('users', {
     lname: {
         type: Sequelize.STRING
     },
+    active: {
+        type: Sequelize.BOOLEAN
+    },
 })
 
 module.exports = Users;
