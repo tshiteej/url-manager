@@ -84,7 +84,7 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { user, shortcut, complete_url } = req.body;
+        const { user, shortcut, complete_url, description, tags } = req.body;
 
         // User can create a shortcut only for oneself
         let userData = await getUserFromToken(req.headers['x-auth-token'])
@@ -97,7 +97,7 @@ router.post(
         if (checkShortcut) return res.status(400).json({ msg: 'You cannot create duplicate shortcuts' });
 
         try {
-            let entry = await Shortcuts.create({ user, shortcut, complete_url })
+            let entry = await Shortcuts.create({ user, shortcut, complete_url, description, tags })
             res.json(entry)
         } catch (err) {
             console.error(err.message);
