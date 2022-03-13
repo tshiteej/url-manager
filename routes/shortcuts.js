@@ -19,7 +19,7 @@ router.get(
         try {
 
             let { q, _sort = [] } = req.query
-            _sort = typeof(_sort) != 'object' ? JSON.parse(_sort) : _sort
+            _sort = typeof (_sort) != 'object' ? JSON.parse(_sort) : _sort
 
             if (!_sort.length) _sort = ['createdAt', 'DESC'];
 
@@ -88,7 +88,14 @@ router.post(
         if (req.body.user != userId) return res.status(400).json({ msg: 'You can only create shortcuts for yourself' });
 
         //Duplicate shortcuts can't be created
-        let checkShortcut = await Shortcuts.findOne({ where: { user: req.body.user, shortcut: req.body.shortcut, active: true } })
+        let checkShortcut = await Shortcuts.findOne({
+            where: {
+                user: req.body.user, active: true, [Op.or]: {
+                    shortcut: req.body.shortcut,
+                    complete_url: req.body.complete_url,
+                }
+            }
+        })
         if (checkShortcut) return res.status(400).json({ msg: 'You cannot create duplicate shortcuts' });
 
         try {
